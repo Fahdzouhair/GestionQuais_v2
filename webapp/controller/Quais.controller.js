@@ -79,7 +79,7 @@ sap.ui.define([
                                 var sKey = oStockEntry.CodeArticle.toString() + "|" + oStockEntry.Division.toString() + "|" + oStockEntry.Magasin.toString();
                                 if (!mAppIndex[sKey]) {
                                     aNewEntries.push({
-                                        code_article: oStockEntry.CodeArticle,
+                                        Codearticle: oStockEntry.CodeArticle,
                                         Division: oStockEntry.Division,
                                         Magasin: oStockEntry.Magasin,
                                         Stock: oStockEntry.StockTotal,
