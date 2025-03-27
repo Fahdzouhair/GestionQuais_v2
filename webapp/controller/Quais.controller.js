@@ -82,7 +82,7 @@ sap.ui.define([
                                         Codearticle: oStockEntry.CodeArticle,
                                         Division: oStockEntry.Division,
                                         Magasin: oStockEntry.Magasin,
-                                        Stock: oStockEntry.StockTotal,
+                                        Stock: oStockEntry.Stock,
                                         Quai1: 0,
                                         Quai2: 0,
                                         Quai3: 0,
@@ -129,22 +129,27 @@ sap.ui.define([
             this.getView().getModel("viewModel").setProperty("/editMode", true);
         },
 
-        onSavePress() { 
-            var oModel = this.getView().getModel('logModel');
+        onSavePress: function() {
+            var oModel = this.getView().getModel("logModel");
             var oTable = this.byId("table");
-            var aContexts = oTable.getBinding("rows").getContexts();
-            
-            aContexts.forEach(function(oContext) {
+        
+            // For sap.m.Table, the items are in the 'items' aggregation:
+            var aItems = oTable.getItems();
+        
+            aItems.forEach(function(oItem) {
+                // Get the binding context for each item
+                var oContext = oItem.getBindingContext(); // or getBindingContext("logModel") if needed
                 var oData = oContext.getObject();
                 var sPath = oContext.getPath();
                 console.log(sPath);
+        
                 var oPayload = {
                     Quai1: parseInt(oData.Quai1, 10),
                     Quai2: parseInt(oData.Quai2, 10),
                     Quai3: parseInt(oData.Quai3, 10),
                     Quai4: parseInt(oData.Quai4, 10)
                 };
-                
+        
                 oModel.update(sPath, oPayload, {
                     success: function() {
                         console.log("Ligne mise à jour : " + sPath);
@@ -154,10 +159,11 @@ sap.ui.define([
                     }
                 });
             });
-            
+        
             sap.m.MessageToast.show("Les mises à jour ont été envoyées.");
             this.getView().getModel("viewModel").setProperty("/editMode", false);
         },
+        
 
         onCancelPress() { 
             var oModel = this.getView().getModel();
